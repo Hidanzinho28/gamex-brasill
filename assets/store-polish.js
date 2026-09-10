@@ -9,6 +9,13 @@
   const nav = document.querySelector('header .nav');
   nav?.querySelector('.logo-mark')?.closest('a')?.remove();
   if(nav && !nav.querySelector('.brand')) nav.insertAdjacentHTML('afterbegin','<a class="gx-brand" href="gamex-brasil.html" aria-label="GameX Brasil, início">GAME<b>X</b></a>');
+  const brand = nav?.querySelector('.gx-brand, .brand');
+  if(brand){brand.classList.add('gx-gif-brand');brand.innerHTML='<img src="assets/gamex-logo.gif" width="64" height="64" alt="GameX Brasil">';}
+  document.querySelectorAll('.hero-art img, footer img[alt*="GameX"]').forEach(img=>{img.src='assets/gamex-x.svg';img.alt='X — GameX Brasil';});
+  document.querySelectorAll('.video-frame').forEach(frame=>{
+    frame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/HNIRNPcdG8M" title="Vídeo de orientação GameX" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
+    const link=document.createElement('a');link.href='https://www.youtube.com/watch?v=HNIRNPcdG8M';link.target='_blank';link.rel='noopener noreferrer';link.className='gx-video-link';link.textContent='Assistir no YouTube ↗';const wrap=document.createElement('div');wrap.className='gx-video-wrap';frame.before(wrap);wrap.append(frame,link);
+  });
   let burger = document.querySelector('.burger');
   if(!burger && nav?.querySelector('.nav-links')) {
     nav.insertAdjacentHTML('beforeend','<button class="burger" type="button" aria-label="Abrir categorias" aria-expanded="false"><span></span><span></span><span></span></button>');
