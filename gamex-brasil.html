@@ -437,6 +437,7 @@
    .price-row .now{font-size:15px;}
  }
 </style>
+<link rel="stylesheet" href="assets/store-polish.css">
 </head>
 <body>
 
@@ -466,7 +467,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         <span id="cart-count">0</span>
       </a>
-      <div class="burger"><span></span><span></span><span></span></div>
+      <button class="burger" type="button" aria-label="Abrir categorias" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
@@ -520,9 +521,9 @@
   <div class="wrap">
     <div class="section-head">
       <div>
-        <h2>Promoções da semana</h2>
+        <span class="catalog-kicker">ESCOLHA SEU PRÓXIMO UPGRADE</span><h2>Seu jogo. Seu pacote.</h2>
       </div>
-      <p>Pacotes com estoque rotativo — quando esgota, é porque saiu rápido.</p>
+      <p>Encontre seus créditos por jogo, compare os pacotes e escolha o seu.</p>
     </div>
     <div class="cat-pills">
       <button class="cat-pill active" type="button" data-filter="all">Todos</button>
@@ -864,35 +865,11 @@
     });
   });
 
-  const categoryMatchers = {
-    robux: href => href.includes('robux'),
-    'v-bucks': href => href.includes('v-bucks'),
-    diamantes: href => href.includes('diamantes'),
-    'valorant-points': href => href.includes('-vp.html')
-  };
-  const productCards = document.querySelectorAll('.products .card');
-  document.querySelectorAll('.cat-pill').forEach(pill=>{
-    pill.addEventListener('click', ()=>{
-      const filter = pill.dataset.filter;
-      document.querySelectorAll('.cat-pill').forEach(item=>item.classList.toggle('active', item === pill));
-      productCards.forEach(card=>{
-        const href = card.getAttribute('href') || '';
-        card.hidden = filter !== 'all' && !categoryMatchers[filter](href);
-      });
-    });
-  });
-
-  document.querySelectorAll('[data-menu-filter]').forEach(link=>{
-    link.addEventListener('click', ()=>{
-      const target = document.querySelector('.cat-pill[data-filter="' + link.dataset.menuFilter + '"]');
-      if(target) target.click();
-    });
-  });
   try {
     const cart = JSON.parse(localStorage.getItem('gamex-cart') || '[]');
     document.getElementById('cart-count').textContent = cart.reduce((total, item) => total + (Number(item.qty) || 0), 0);
   } catch (_) {}
 </script>
 
-</body>
+<script src="assets/store-polish.js"></script></body>
 </html>
