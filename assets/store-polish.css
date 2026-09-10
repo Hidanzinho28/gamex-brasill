@@ -9,3 +9,14 @@
 /* Keep navigation controls identical on store and product pages. */
 .burger{display:none;position:relative;flex:none;width:42px;height:42px;padding:0}.burger span{position:absolute;left:11px;right:11px;height:2px;background:#f8e5d8;border-radius:2px}.burger span:nth-child(1){top:13px}.burger span:nth-child(2){top:19px}.burger span:nth-child(3){top:25px}.gx-section-nav{scrollbar-width:thin;scrollbar-color:#674127 #17110d}.nav>.cart-btn{margin-left:auto}
 @media(max-width:850px){.burger{display:block}.nav>.gx-brand{margin-right:auto}}
+
+/* User supplied animated branding and clean product surrounds. */
+.nav .gx-gif-brand{display:flex;align-items:center;flex:none;line-height:0;padding:0}
+.nav .gx-gif-brand img{display:block;width:64px;height:64px;object-fit:contain;border-radius:10px}
+.card .cover{background:transparent!important}
+.hero-art img{object-fit:contain;max-width:380px;width:100%;filter:drop-shadow(0 20px 45px #ff781a38)}
+.video-frame{display:block!important;aspect-ratio:16/9!important;position:relative}
+.video-frame iframe{display:block;width:100%;height:100%;position:absolute;inset:0;border:0}
+.gx-video-link{font:600 12px Inter,sans-serif;color:#ffb16f;display:block;margin-top:10px}
+.how-grid>.gx-video-link,.redeem-grid>.gx-video-link{grid-column:1}
+@media(max-width:560px){.nav .gx-gif-brand img{width:46px;height:46px}}
