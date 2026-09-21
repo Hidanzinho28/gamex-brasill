@@ -1,0 +1,53 @@
+(() => {
+  'use strict';
+  const discord='https://discord.com/invite/gamexbrasil';
+  const icon=(name)=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">'+({chat:'<path d="M4 4h16v12H9l-5 4V4Z"/>',discord:'<path d="m8 5-3 1-3 12 5 2 1-3m8-12 3 1 3 12-5 2-1-3M8 6h8M7 16c3 2 7 2 10 0"/><circle cx="8.5" cy="12" r="1"/><circle cx="15.5" cy="12" r="1"/>',shield:'<path d="m12 2 8 4v6c0 5-8 10-8 10S4 17 4 12V6l8-4Z"/><path d="m8 12 3 3 5-6"/>',pix:'<path d="m12 2 10 10-10 10L2 12 12 2Zm-6 6 6 6 6-6M6 16l6-6 6 6"/>'}[name])+'</svg>';
+  const hero=document.querySelector('.hero-art');
+  if(hero){
+    hero.classList.add('gx-campaign-art');
+    hero.innerHTML='<a href="#produtos" aria-label="Explorar os produtos GameX"><img src="assets/banner-gamex.png" width="1672" height="941" alt="GameX Digital Store — Robux, gift cards, recargas, keys e muito mais"></a>';
+    hero.closest('.hero-grid').classList.add('gx-campaign-grid');
+    const catalog=document.querySelector('#produtos');
+    if(catalog)catalog.insertAdjacentHTML('beforebegin','<section class="wrap gx-promo-editorial" aria-labelledby="gx-promo-title"><a class="gx-promo-picture" href="#produtos" aria-label="Ver os pacotes disponíveis"><img src="assets/promo-gamex.png" width="941" height="1672" loading="lazy" alt="Arte promocional GameX com Robux e gift cards"></a><div class="gx-promo-copy"><span class="catalog-kicker">SEU PRÓXIMO JOGO COMEÇA AQUI</span><h2 id="gx-promo-title">Mais jogo.<br>Mais <em>possibilidades.</em></h2><p>Escolha seu pacote, confira os detalhes e prepare-se para a próxima partida.</p><a class="btn btn-primary" href="#produtos">Explorar produtos <span aria-hidden="true">↗</span></a><small>Consulte no catálogo os produtos e valores disponíveis.</small></div></section>');
+  }
+  document.querySelectorAll('footer img[alt*="GameX"]').forEach(img=>{const brand=document.createElement('span');brand.className='gx-footer-wordmark';brand.innerHTML='Game<b>X</b>';img.replaceWith(brand);});
+  document.querySelectorAll('.card').forEach(card=>{
+    if(/^(1200|1700) Robux$/.test(card.querySelector('h3')?.textContent.trim()||'')){
+      card.classList.add('gx-special-product');
+      card.insertAdjacentHTML('afterbegin','<span class="gx-offer-ribbon"><span aria-hidden="true">✦</span> OFERTA ESPECIAL</span>');
+    }
+  });
+  const reviews=[
+    ['igabbssilva',4,'pedido entregue certinho mais demorou 8 minutos pra chegar no meu email porem chegou e deu certo, recomendo galera'],
+    ['talokoplays',5,'Comprei 2 vezes com eles, top top topppp só queria deixar uma sugestão poderiam fazer um sorteio de algum pacote de robux, acho que seria bem legal'],
+    ['Lucasjorgeb2',3,'comprei hoje 1700 robux porque o de 600 tava esgotado podiam melhorar os preços achei um pouco carro 19 reais'],
+    ['HYDRAiii',5,'MuitoOOOOOOO bom recomendo'],
+    ['ydoczlipe',5,'No inicio eu tava com medo pq é foda confiar nas lojas da internet mais chegou certinho pessoal 👏']
+  ];
+  document.querySelectorAll('.reviews-scroll').forEach((track,index)=>{
+    track.classList.add('gx-reviews-track');track.id='gx-reviews-'+index;
+    track.setAttribute('aria-label','Avaliações da comunidade GameX');track.tabIndex=0;
+    track.innerHTML=reviews.map(([name,stars,quote])=>'<article class="review-card"><div class="gx-review-top"><span class="gx-review-avatar" aria-hidden="true">'+name[0].toUpperCase()+'</span><strong>'+name+'</strong></div><div class="stars" aria-label="'+stars+' de 5 estrelas">'+'★'.repeat(stars)+'<span aria-hidden="true">'+'★'.repeat(5-stars)+'</span></div><p>“'+quote+'”</p></article>').join('');
+    const controls=document.createElement('div');controls.className='gx-review-controls';
+    controls.innerHTML='<span>Histórias de quem joga com a gente</span><div><button type="button" aria-label="Avaliações anteriores" aria-controls="'+track.id+'">←</button><button type="button" class="gx-review-pause" aria-controls="'+track.id+'">Pausar</button><button type="button" aria-label="Próximas avaliações" aria-controls="'+track.id+'">→</button></div>';
+    track.before(controls);
+    const buttons=controls.querySelectorAll('button'),motion=matchMedia('(prefers-reduced-motion: reduce)');
+    let paused=motion.matches,hover=false,focused=false,drag=null,last=0,direction=1,position=0;
+    const sync=()=>{buttons[1].textContent=paused?'Reproduzir':'Pausar';buttons[1].setAttribute('aria-label',paused?'Iniciar movimento das avaliações':'Pausar movimento das avaliações');};sync();
+    buttons[1].addEventListener('click',()=>{paused=!paused;sync();});
+    const move=(sign)=>{paused=true;sync();track.scrollBy({left:sign*(track.firstElementChild.getBoundingClientRect().width+18),behavior:motion.matches?'auto':'smooth'});};
+    buttons[0].addEventListener('click',()=>move(-1));buttons[2].addEventListener('click',()=>move(1));
+    track.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();move(e.key==='ArrowRight'?1:-1);}});
+    track.addEventListener('mouseenter',()=>hover=true);track.addEventListener('mouseleave',()=>hover=false);
+    track.parentElement.addEventListener('focusin',()=>focused=true);track.parentElement.addEventListener('focusout',e=>focused=track.parentElement.contains(e.relatedTarget));
+    track.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0)return;drag={x:e.clientX,left:track.scrollLeft};track.setPointerCapture(e.pointerId);track.classList.add('is-dragging');});
+    track.addEventListener('pointermove',e=>{if(drag)track.scrollLeft=drag.left-(e.clientX-drag.x);});
+    const end=()=>{drag=null;track.classList.remove('is-dragging');};track.addEventListener('pointerup',end);track.addEventListener('pointercancel',end);
+    track.addEventListener('touchstart',()=>{paused=true;sync();},{passive:true});
+    motion.addEventListener('change',()=>{if(motion.matches){paused=true;sync();}});
+    function animate(now){const delta=Math.min(now-last,50);last=now;if(!paused&&!hover&&!focused&&!drag&&!document.hidden&&!motion.matches){const max=track.scrollWidth-track.clientWidth;if(max>0){position=Math.max(0,Math.min(max,position+direction*delta*.028));track.scrollLeft=position;if(position>=max)direction=-1;if(position<=0)direction=1;}}else{position=track.scrollLeft;}requestAnimationFrame(animate);}requestAnimationFrame(animate);
+  });
+  const footer=document.querySelector('footer');
+  footer?.insertAdjacentHTML('beforebegin','<section class="gx-assurance" aria-label="Informações da loja"><div class="wrap gx-assurance-grid"><div>'+icon('pix')+'<span><strong>Pagamento via PIX</strong><small>QR Code e Copia e Cola</small></span></div><div>'+icon('shield')+'<span><strong>Sua senha é só sua</strong><small>Não pedimos a senha da conta</small></span></div><div>'+icon('chat')+'<span><strong>Fale com a GameX</strong><small>Atendimento por e-mail e Discord</small></span></div></div></section>');
+  document.body.insertAdjacentHTML('beforeend','<nav class="gx-contact-dock" aria-label="Canais de atendimento"><a href="'+discord+'" target="_blank" rel="noopener noreferrer" aria-label="Entrar no Discord da GameX">'+icon('discord')+'<span>Discord</span></a><a href="mailto:suporte@agamexbrasil.com" aria-label="Falar com o suporte por e-mail">'+icon('chat')+'<span>Suporte</span></a></nav>');
+})();
